@@ -64,7 +64,18 @@ class UserLib
                 $this->auth_user = $this->get_user_by_id($cookie_user->id);
             }
         }
+        unset($this->auth_user->user_password);
+        unset($this->auth_user->password_reset_token );
+        unset($this->auth_user->password_reset_expires_at);
+        unset($this->auth_user->user_password);
         return $this->auth_user;
+    }
+
+    public function __unset($user_property)
+    {
+        if ($this->auth_user) {
+            unset($this->auth_user->$user_property);
+        }
     }
 
     /**
