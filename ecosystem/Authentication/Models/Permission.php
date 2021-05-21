@@ -47,4 +47,9 @@ class Permission extends Model
 	protected $afterFind            = [];
 	protected $beforeDelete         = [];
 	protected $afterDelete          = [];
+
+	public function getPermissionById(int $id)
+	{
+		return $this->where('id', $id)->first();
+	}
 }

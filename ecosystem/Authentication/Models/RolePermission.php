@@ -47,4 +47,13 @@ class RolePermission extends Model
 	protected $afterFind            = [];
 	protected $beforeDelete         = [];
 	protected $afterDelete          = [];
+
+	public function fetchRolePermissionInfo($role_id):array
+    {
+        $this->select('role_permissions.*');
+        $this->select('t2.permission, t2.permission_slug');
+        $this->join('permissions t2', 'role_permissions.permission_id = t2.id');
+        $this->where('role_permissions.role_id', $role_id);
+        return $this->get()->getResultObject();
+    }
 }

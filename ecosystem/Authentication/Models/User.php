@@ -41,12 +41,45 @@ class User extends Model
 
 	// Callbacks
 	protected $allowCallbacks       = true;
-	protected $beforeInsert         = [];
+	protected $beforeInsert         = ['hashPassword'];
 	protected $afterInsert          = [];
-	protected $beforeUpdate         = [];
+	protected $beforeUpdate         = ['hashPassword'];
 	protected $afterUpdate          = [];
 	protected $beforeFind           = [];
 	protected $afterFind            = [];
 	protected $beforeDelete         = [];
 	protected $afterDelete          = [];
+	
+	/**
+	 * Hash a password
+	 *
+	 * @param array $data
+	 * @return void
+	 */
+	protected function hashPassword(array $data) 
+	{
+        if (isset($data['data']['user_password'])) { // check if the password key is set
+            $data['data']['user_password'] = password_hash($data['data']['user_password'], PASSWORD_DEFAULT); // hash password
+        }
+        return $data;
+    }
+
+	/**
+	 * Fetch a user record
+	 *
+	 * @param integer $id		user id
+	 * @return void
+	 */
+	public function fetchUserById(int $id) 
+	{
+        $this->select('users.*');
+        $this->select('t2.*');
+        $this->select('t3.role_id');
+        $this->select('t4.role, t4.role_slug');
+
+        $this->join('user_profile t2', 'users.id = t2.user_id');
+        $this->join('user_role t3', 'users.id = t3.user_id');
+        $this->join('roles t4', 't3.role_id = t4.id');
+        return $this->where('users.id', $id)->first();
+    }
 }

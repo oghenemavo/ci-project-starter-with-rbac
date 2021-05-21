@@ -42,4 +42,18 @@ class UserRole extends Model
 	protected $afterFind            = [];
 	protected $beforeDelete         = [];
 	protected $afterDelete          = [];
+
+	/**
+	 * Fetch a user role record by user id
+	 *
+	 * @param string $user_id
+	 * @return void
+	 */
+	public function fetchRoleInfo($user_id) {
+        $this->select('user_role.role_id');
+        $this->select('t2.role,t2.role_slug,t2.is_super_admin,t2.is_active');
+
+        $this->join('roles t2', 'user_role.role_id = t2.id');
+        return $this->where('user_role.user_id', $user_id)->first();
+    }
 }

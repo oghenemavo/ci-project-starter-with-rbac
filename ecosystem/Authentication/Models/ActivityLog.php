@@ -4,10 +4,10 @@ namespace Ecosystem\Authentication\Models;
 
 use CodeIgniter\Model;
 
-class UserRememberToken extends Model
+class ActivityLog extends Model
 {
 	protected $DBGroup              = 'default';
-	protected $table                = 'user_remember_tokens';
+	protected $table                = 'activity_log';
 	protected $primaryKey           = 'id';
 	protected $useAutoIncrement     = true;
 	protected $insertID             = 0;
@@ -16,9 +16,9 @@ class UserRememberToken extends Model
 	protected $protectFields        = true;
 	protected $allowedFields        = [
 		'user_id',
-		'remember_token',
-        'user_agent',
-        'expires_at',
+		'ip_address',
+		'activity',
+		'description',
 	];
 
 	// Dates
@@ -45,26 +45,8 @@ class UserRememberToken extends Model
 	protected $beforeDelete         = [];
 	protected $afterDelete          = [];
 
-	/**
-	 * Fetch a stored remember login data by token
-	 *
-	 * @param string $token
-	 * @return mixed
-	 */
-	public function fetchRememberByToken (string $token):mixed 
+	public static function create($data)
 	{
-        return $this->where('remember_token', $token)->first();
-    }
-
-	public function fetchUserByToken(string $token):mixed 
-	{
-        $this->select('user_remember_tokens.remember_token, user_remember_tokens.user_agent, user_remember_tokens.expires_at');
-        $this->select('t1.id, t1.first_name, t1.last_name, t1.user_email');
-        $this->select('t3.id as role_id, t3.role, t3.role_slug');
-
-        $this->join('users t1', 't1.id = user_remember_tokens.user_id');
-        $this->join('user_role t2', 't1.id = t2.user_id');
-        $this->join('roles t3', 't2.role_id = t3.id');
-        return $this->where('user_remember_tokens.remember_token', $token)->first();
-    }
+		return (new static)->save($data);
+	}
 }
