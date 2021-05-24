@@ -13,6 +13,7 @@
         <input type="text" class="form-control" name="firstname" id="firstname" value="<?= $user->first_name ?>" placeholder="FIRST NAME" <?php if ($is_same_superadmin) echo 'disabled'; ?>>
         <?= $validation->showError('firstname'); ?>
     </div>
+
     <div class="form-group">
         <label for="lastname" class="sr-only sr-only-focusable">LAST NAME</label>
         <input type="text" class="form-control" name="lastname" id="lastname" value="<?= $user->last_name ?>" placeholder="LAST NAME" <?php if ($is_same_superadmin) echo 'disabled'; ?>>
@@ -62,13 +63,7 @@
         <?php else: ?>
             <select name="role">
                 <?php foreach ($roles as $role): ?>
-                    <?php if ($is_superadmin && $is_checker_superadmin): // if edited user is super admin && editor is super admin  ?>
-                        <option value="<?= $role->id ?>" <?= $user->role_id == $role->id ? 'selected' : '' ?>>
-                            <?= $role->role ?>
-                        </option>
-                    <?php endif; ?>
-
-                    <?php if (!$is_checker_superadmin && strtolower($role->role_slug) != strtolower('super_admin')): // if edited is not super admin and editor is not super ?>
+                    <?php if (!$is_checker_superadmin && !$role->is_super_admin): // if edited is not super admin and editor is not super ?>
                         <option value="<?= $role->id ?>" <?= $user->role_id == $role->id ? 'selected' : '' ?>>
                             <?= $role->role ?>
                         </option>

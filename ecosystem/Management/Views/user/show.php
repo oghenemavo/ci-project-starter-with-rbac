@@ -32,35 +32,33 @@
 </dl>
 
 <ul>
-    <?php if ($userlib->has_privilege('edit_user')): ?>
+    <?php if ($rbac->has_permission('user', 'can_read')): ?>
     <li><a href="<?= base_url(route_to('edit_user', $user->id)) ?>">Edit</a></li>
     <?php endif; ?>
-    <?php if ($userlib->has_privilege('delete_user')): ?>
+    <?php if ($rbac->has_permission('user', 'can_delete')): ?>
         <?php if ($user->id != $userlib->get_user()->id): ?>
             <!-- create a modal and add a form to it-->
             <!-- use chrome to view dialog-->
-            <?php if ($user->role_name != 'Super Admin'): ?>
-                <li>
-                    <?php
-                        //open form
-                        $attributes = ['id' => 'update-profile'];
-                        echo form_open(base_url('admin/delete/user/profile/'. $user->id), $attributes);
-                    ?>
-                    <button type="submit">Delete</button>
+            <li>
+                <?php
+                    //open form
+                    $attributes = ['id' => 'update-profile'];
+                    echo form_open(base_url('admin/delete/user/profile/'. $user->id), $attributes);
+                ?>
+                <button type="submit">Delete</button>
 
-                    </form>
-                    <!--<dialog>-->
-                    <!--    <h4>Delete <?//= $user->user_first_name . ' ' . $user->user_last_name ?>--</h4>-->
-                    <!--    <p>are you sure you want to delete this user?</p>-->
-                    <!--    <form>-->
-                    <!--        <button type="submit">Delete</button>-->
-                    <!--    </form>-->
-                    <!--    <button type="button" id="exit">Cancel</button>-->
-                    <!--</dialog>-->
-                    <!--<button type="button" id="exit">Delete user</button>-->
-                    <!-- use chrome to view dialog-->
-                </li>
-            <?php endif; ?>
+                </form>
+                <!--<dialog>-->
+                <!--    <h4>Delete <?//= $user->user_first_name . ' ' . $user->user_last_name ?>--</h4>-->
+                <!--    <p>are you sure you want to delete this user?</p>-->
+                <!--    <form>-->
+                <!--        <button type="submit">Delete</button>-->
+                <!--    </form>-->
+                <!--    <button type="button" id="exit">Cancel</button>-->
+                <!--</dialog>-->
+                <!--<button type="button" id="exit">Delete user</button>-->
+                <!-- use chrome to view dialog-->
+            </li>
         <?php endif; ?>
     <?php endif; ?>
 </ul>

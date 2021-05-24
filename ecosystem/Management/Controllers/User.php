@@ -21,7 +21,7 @@ class User extends AuthBaseController
 	 */
 	public function index()
 	{
-		$this->userLib->has_privilege_or_exception('view_user');
+		// $this->userLib->has_privilege_or_exception('view_user');
 
 		$data['page_title'] = 'All Users List';
         $data['users'] = $this->manageLib->get_users();
@@ -35,15 +35,16 @@ class User extends AuthBaseController
 	 */
 	public function show($id = null)
 	{
-		$this->userLib->has_privilege_or_exception('view_user');
+		// $this->userLib->has_privilege_or_exception('view_user');
 
 		if ($id) {
 			$data['page_title'] = 'User Profile';
 	
-			$user = $this->userLib->get_user_by_id($id);
+			$user = $this->userlib->get_user_by_id($id);
 			if ($user) {
 				$data['user'] = $user;
-				$data['userlib'] = $this->userLib;
+				$data['userlib'] = $this->userlib;
+				$data['rbac'] = $this->rbac;
 				return view($this->_setPagePath($this->viewPath, 'show'), $data);
 			}
 		}
@@ -57,11 +58,11 @@ class User extends AuthBaseController
 	 */
 	public function new()
 	{
-		$this->userLib->has_privilege_or_exception('add_user');
+		// $this->userLib->has_privilege_or_exception('add_user');
 
 		$data['page_title'] = 'Create User Profile';
 		$data['validation'] = $this->validation;
-		$data['userlib'] = $this->userLib;
+		$data['userlib'] = $this->userlib;
 		$data['roles'] = $this->roleLib->get_roles();
 		return view($this->_setPagePath($this->viewPath, 'add'), $data);
 	}
@@ -151,20 +152,19 @@ class User extends AuthBaseController
 	 */
 	public function edit($id = null)
 	{
-		$this->userLib->has_privilege_or_exception('edit_user');
-
+		// $this->userLib->has_privilege_or_exception('edit_user');
 		if ($id) {
-			$user = $this->userLib->get_user_by_id($id);
+			$user = $this->userlib->get_user_by_id($id);
 			if ($user) {
 				$data['page_title'] = 'Edit User Profile';
 				$data['validation'] = $this->validation;
 				$data['user'] = $user;
-				$data['checker'] = $this->userLib->get_user();
+				$data['checker'] = $this->userlib->get_user();
 				$data['roles'] = $this->roleLib->get_roles();
 
-				$data['is_same_user'] = $user->id == $data['checker']->id; 
-				$data['is_superadmin'] = strtolower($user->role_slug) == strtolower('super_admin'); // edited
-				$data['is_checker_superadmin'] = strtolower($data['checker']->role_slug) == strtolower('super_admin'); //editor
+				$data['is_same_user'] = $user->id == $data['checker']->id; // edited & editor is the same
+				$data['is_superadmin'] = $user->is_super_admin == '1'; // edited is super admin
+				$data['is_checker_superadmin'] = $data['checker']->is_super_admin == '1'; // editor is super admin
 				$data['is_same_superadmin'] = $data['is_superadmin'] && $data['is_checker_superadmin'] && !$data['is_same_user']; // check if is super admin && the owner of the profile b4 editing
 
 				return view($this->_setPagePath($this->viewPath, 'edit'), $data);

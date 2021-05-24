@@ -3,6 +3,8 @@
 
 <?= $this->section('content') ?>
 
+<a href="<?= base_url(route_to('new_user')) ?>">Create New User</a>
+
 <table id="users-list" class="display" style="width:100%">
     <thead>
         <tr>
