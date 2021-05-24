@@ -52,6 +52,8 @@ class AuthBaseController extends Controller
 		$this->signupLib = Services::signupLib();
 		$this->accountLib = Services::accountLib();
 		$this->userlib = Services::userlib();
+		$this->roleLib = Services::roleLib();
+		$this->permissionsLib = Services::permissionsLib();
 	}
 
 	/**

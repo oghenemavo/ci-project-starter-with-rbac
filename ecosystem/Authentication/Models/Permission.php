@@ -52,4 +52,12 @@ class Permission extends Model
 	{
 		return $this->where('id', $id)->first();
 	}
+
+	public function fetchPermissionByGroup(int $perm_group_id)
+	{
+		$this->select('permissions.*');
+		$this->join('permission_groups t2', 'permissions.perm_group_id = t2.id');
+		$this->where('t2.id', $perm_group_id);
+		return $this->get()->getResultObject();
+	}
 }
