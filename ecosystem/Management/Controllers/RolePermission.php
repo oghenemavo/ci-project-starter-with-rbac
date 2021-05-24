@@ -17,7 +17,7 @@ class RolePermission extends AuthBaseController
 	 */
 	public function index($role_id)
 	{
-		// $this->userLib->has_privilege_or_exception('edit_role'); // check privilege or 404
+		$this->rbac->has_permission_or_exception('role', 'can_update'); // check privilege or 404
 
 		$role_info = $this->roleLib->find_role($role_id);
 		if ($role_info) {
@@ -103,8 +103,9 @@ class RolePermission extends AuthBaseController
 	 * @param integer $role_id
 	 * @return void
 	 */
-	public function edit($role_id) {
-        // $this->userLib->has_privilege_or_exception('edit_role'); // check if user has the privilege or show 404
+	public function edit($role_id) 
+	{
+		$this->rbac->has_permission_or_exception('role', 'can_update'); // check if user has the privilege or show 404
 		
 		$data = [
 			'role_id' => $role_id,

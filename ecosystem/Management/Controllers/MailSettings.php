@@ -11,7 +11,7 @@ class MailSettings extends AuthBaseController
 
 	public function index()
 	{
-		// $this->userLib->has_privilege_or_exception('view_user');
+		$this->rbac->has_permission_or_exception('mail', 'can_read');
 
 		$data['page_title'] = 'Mail Settings';
         $data['clients'] = (new MailClient())->findAll();
@@ -64,7 +64,7 @@ class MailSettings extends AuthBaseController
 
 	public function templates()
 	{
-		// $this->userLib->has_privilege_or_exception('view_user');
+		$this->rbac->has_permission_or_exception('mail', 'can_read');
 
 		$data['page_title'] = 'Mail Templates';
         $data['templates'] = service('mailTemplateLib')->get_templates();
@@ -73,7 +73,7 @@ class MailSettings extends AuthBaseController
 
 	public function showTemplate($id = null)
 	{
-		// $this->userLib->has_privilege_or_exception('edit_user');
+		$this->rbac->has_permission_or_exception('mail', 'can_update');
 
 		if ($id) {
 			$template = service('mailTemplateLib')->find_template_by_id($id);

@@ -20,8 +20,9 @@ class RoleSettings extends AuthBaseController
      *
      * @return void
      */
-    public function viewRole() {
-        // $this->userLib->has_privilege_or_exception('view_role');
+    public function viewRole() 
+	{
+		$this->rbac->has_permission_or_exception('role', 'can_read');
 
         $data['page_title'] = 'Roles';
         $data['validation'] = $this->validation;
@@ -35,8 +36,9 @@ class RoleSettings extends AuthBaseController
      *
      * @return void
      */
-    public function createRole() {
-        // $this->userLib->has_privilege_or_exception('add_role'); // check if user has the privilege or show 404
+    public function createRole() 
+	{
+		$this->rbac->has_permission_or_exception('role', 'can_create'); // check if user has the privilege or show 404
 
 		// create validation rules
 		$rules = [
@@ -95,8 +97,9 @@ class RoleSettings extends AuthBaseController
      *
      * @return void
      */
-    public function editRole($roleId) {
-        // $this->userLib->has_privilege_or_exception('edit_role');
+    public function editRole($roleId) 
+	{
+		$this->rbac->has_permission_or_exception('role', 'can_update');
 
 		$role = $this->roleLib->find_role($roleId);
 		if ($role) {
@@ -114,9 +117,8 @@ class RoleSettings extends AuthBaseController
 	 * @param integer $roleId
 	 * @return void
 	 */
-	public function processEditRole($roleId) {
-        // $this->userLib->has_privilege_or_exception('edit_role'); // check if user has the privilege or show 404
-
+	public function processEditRole($roleId) 
+	{
 		$role = $this->roleLib->find_role($roleId);
 		// create validation rules
 		$rules = [

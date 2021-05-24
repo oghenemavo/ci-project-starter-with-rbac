@@ -21,7 +21,7 @@ class User extends AuthBaseController
 	 */
 	public function index()
 	{
-		// $this->userLib->has_privilege_or_exception('view_user');
+		$this->rbac->has_permission_or_exception('user', 'can_read');
 
 		$data['page_title'] = 'All Users List';
         $data['users'] = $this->manageLib->get_users();
@@ -35,7 +35,7 @@ class User extends AuthBaseController
 	 */
 	public function show($id = null)
 	{
-		// $this->userLib->has_privilege_or_exception('view_user');
+		$this->rbac->has_permission_or_exception('role', 'can_read');
 
 		if ($id) {
 			$data['page_title'] = 'User Profile';
@@ -58,7 +58,7 @@ class User extends AuthBaseController
 	 */
 	public function new()
 	{
-		// $this->userLib->has_privilege_or_exception('add_user');
+		$this->rbac->has_permission_or_exception('role', 'can_create');
 
 		$data['page_title'] = 'Create User Profile';
 		$data['validation'] = $this->validation;
@@ -152,7 +152,7 @@ class User extends AuthBaseController
 	 */
 	public function edit($id = null)
 	{
-		// $this->userLib->has_privilege_or_exception('edit_user');
+		$this->rbac->has_permission_or_exception('role', 'can_update');
 		if ($id) {
 			$user = $this->userlib->get_user_by_id($id);
 			if ($user) {

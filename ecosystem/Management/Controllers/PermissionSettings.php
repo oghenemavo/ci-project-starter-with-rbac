@@ -16,7 +16,7 @@ class PermissionSettings extends AuthBaseController
 	 */
 	public function index()
 	{
-		// $this->userLib->has_privilege_or_exception('view_role'); // check privilege or 404
+		$this->rbac->has_permission_or_exception('role', 'can_read'); // check privilege or 404
 
         $data['page_title'] = 'Permission Group';
         $data['validation'] = $this->validation;
@@ -35,8 +35,9 @@ class PermissionSettings extends AuthBaseController
      *
      * @return void
      */
-    public function createPermissionGroup() {
-        // $this->userLib->has_privilege_or_exception('add_role'); // check if user has the privilege or show 404
+    public function createPermissionGroup() 
+	{
+		$this->rbac->has_permission_or_exception('role', 'can_create'); // check if user has the privilege or show 404
 
 		// create validation rules
 		$rules = [
@@ -100,8 +101,9 @@ class PermissionSettings extends AuthBaseController
 	 * @param integer $id
 	 * @return void
 	 */
-	public function edit($id) {
-		// $this->userLib->has_privilege_or_exception('edit_role');
+	public function edit($id) 
+	{
+		$this->rbac->has_permission_or_exception('role', 'can_update');
 
 		$permission_group = service('permissionsLib')->find_permission_group($id);
 		if ($permission_group) {
@@ -119,8 +121,9 @@ class PermissionSettings extends AuthBaseController
 	 * @param integer $id
 	 * @return void
 	 */
-	public function editPermissionGroup($id) {
-        // $this->userLib->has_privilege_or_exception('edit_role'); // check if user has the privilege or show 404
+	public function editPermissionGroup($id) 
+	{
+		$this->rbac->has_permission_or_exception('role', 'can_update'); // check if user has the privilege or show 404
 
 		// create validation rules
 		$rules = [
@@ -187,7 +190,8 @@ class PermissionSettings extends AuthBaseController
 	 */
 	public function viewPermission($perm_group_id)
 	{
-		// $this->userLib->has_privilege_or_exception('view_role'); // check privilege or 404
+		$this->rbac->has_permission_or_exception('role', 'can_read'); // check privilege or 404
+
 		$permissions = service('permissionsLib')->get_permissions_by_group($perm_group_id);
 
 		$data['page_title'] = 'Permissions';
@@ -200,8 +204,9 @@ class PermissionSettings extends AuthBaseController
 		return view($this->_setPagePath($this->viewPath, 'permission'), $data);
 	}
 
-	public function createPermission($perm_group_id) {
-        // $this->userLib->has_privilege_or_exception('add_role'); // check if user has the privilege or show 404
+	public function createPermission($perm_group_id) 
+	{
+		$this->rbac->has_permission_or_exception('role', 'can_create'); // check if user has the privilege or show 404
 
 		// create validation rules
 		$rules = [
@@ -264,8 +269,9 @@ class PermissionSettings extends AuthBaseController
 	 * @param integer $id
 	 * @return void
 	 */
-	public function editPermission($id) {
-		// $this->userLib->has_privilege_or_exception('edit_role');
+	public function editPermission($id) 
+	{
+		$this->rbac->has_permission_or_exception('role', 'can_read');
 
 		$permission = service('permissionsLib')->find_permission($id);
 		if ($permission) {
@@ -283,8 +289,9 @@ class PermissionSettings extends AuthBaseController
 	 * @param integer $id
 	 * @return void
 	 */
-	public function processEditPermission($id) {
-        // $this->userLib->has_privilege_or_exception('edit_role'); // check if user has the privilege or show 404
+	public function processEditPermission($id) 
+	{
+		$this->rbac->has_permission_or_exception('role', 'can_update'); // check if user has the privilege or show 404
 
 		// create validation rules
 		$rules = [
