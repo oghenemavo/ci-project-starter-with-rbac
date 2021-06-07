@@ -26,9 +26,9 @@ class Rbac
      * Get Permissions associated with a role
      *
      * @param integer $role_id                  role id
-     * @return array
+     * @return mixed
      */
-    public function get_role_permission_info(int $role_id): array
+    public function get_role_permission_info(int $role_id): mixed
     {
         $permission = new Permission();
         $role_permission = new RolePermission();
@@ -65,9 +65,9 @@ class Rbac
      * Set role to have requiste permissions
      *
      * @param integer $user_id
-     * @return array
+     * @return mixed
      */
-    public function set_role(int $user_id): array
+    public function set_role(int $user_id): mixed
     {
         $record = $this->find_user_role($user_id);
         if ($record->is_active) { // check user role is active
