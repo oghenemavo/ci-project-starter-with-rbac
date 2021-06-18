@@ -18,7 +18,7 @@ class SignupLib
      */
     public function create_user(array $user_data, $role_id = '1') 
     {
-        helper('encryption'); // custom encryption helper function
+        helper(['encryption', 'sender']); // custom encryption helper function
 
         $encrypted_token = encrypt_data(6);  // goes to the user email address
         $hashed_token = hash_data($encrypted_token); // goes to the database 
@@ -77,45 +77,19 @@ class SignupLib
             $result['error'] = 'Unable to sign up user';
         } else {
             // send email
-            $mail = [
-                'user_email' => $user_data['user_email'], 
+            $address = [
+                'to' => $user_data['user_email'], 
+            ];
+            
+            $data = [
                 'name' => $user_data['last_name'], 
                 'token' => $encrypted_token,
             ];
-            $this->send_activation_mail($mail);
+
+            send_mail('sign_up', $address, $data);
             $result['success'] = true;
         }
         return $result;
-    }
-
-    protected function send_activation_mail(array $data) 
-    {
-        $template = service('mailTemplateLib')->find_template('sign_up');
-
-        if ($template) {
-            $view = [
-                'html' => $template->template_html,
-                'text' => $template->template_text,
-            ];
-    
-            $view['data'] = [
-                'token' => $data['token'],
-                'name' => $data['name'],
-            ];
-    
-            $address = [
-                'from' => $template->mail_from ?? 'autodispatch@demo.com',
-                'from_name' => $template->from_name ?? 'Auto Dispatch',
-                'to' => $data['user_email'],
-                'to_name' => $data['name'],
-            ];
-    
-            $mail = [
-                'subject' => $template->subject ?? 'Confirm your Account',
-            ];
-            return Services::mailerLib()->send_mail($view, $address, $mail);
-        }
-        return false;
     }
 
 }

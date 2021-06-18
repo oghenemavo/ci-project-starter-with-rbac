@@ -30,7 +30,12 @@ class CIMailerLib {
             }
         }
 
-        return $email->send(); // send mail
+        if ($email->send()) {
+            return true;
+        } 
+        
+        log_message('info', 'Your message could not be sent');
+        return false;
     }
 
     /**

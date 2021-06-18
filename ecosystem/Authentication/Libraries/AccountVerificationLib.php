@@ -83,7 +83,7 @@ class AccountVerificationLib
      */
     public function resend_verification(string $token) 
     {
-        helper('encryption'); // custom encryption helper function
+        helper(['encryption', 'sender']); // custom encryption helper function
         $result = [];
 
         // Verification Table
@@ -116,47 +116,20 @@ class AccountVerificationLib
                 }
 
                 // send email
-                $mail = [
-                    'user_email' => $user_account->user_email, 
+                $data = [
                     'name' => $user_account->last_name, 
                     'token' => $encrypted_token,
                 ];
 
-                $this->send_activation_mail($mail);
+                $address = [
+                    'to' => $user_account->user_email,
+                ];
+
+                send_mail('authentication', $address, $data);
                 $result['success'] = true;
             }
         }
         return $result;
-    }
-
-    protected function send_activation_mail(array $data) 
-    {
-        $template = service('mailTemplateLib')->find_template('authentication');
-
-        if ($template) {
-            $view = [
-                'html' => $template->template_html,
-                'text' => $template->template_text,
-            ];
-    
-            $view['data'] = [
-                'token' => $data['token'],
-                'name' => $data['name'],
-            ];
-    
-            $address = [
-                'from' => $template->mail_from ?? 'autodispatch@demo.com',
-                'from_name' => $template->from_name ?? 'Auto Dispatch',
-                'to' => $data['user_email'],
-                'to_name' => $data['name'],
-            ];
-    
-            $mail = [
-                'subject' => $template->subject ?? 'Authenticate your Account',
-            ];
-            return Services::mailerLib()->send_mail($view, $address, $mail);
-        }
-        return false;
     }
 
 }

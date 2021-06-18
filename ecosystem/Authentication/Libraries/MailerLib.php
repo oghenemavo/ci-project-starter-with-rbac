@@ -24,20 +24,31 @@ class MailerLib {
      * @param array $attachment     file attachment 
      * @return bool                 true or false
      */
-    public function send_mail(array $view, array $address, array $data, array $attachment = [])
+    public function send_mail(string $template, array $address, array $data, array $attachment = [])
     {
-        $parser = Services::parser();
+        $view = service('mailTemplateLib')->find_template($template);
+        if ($view) {
+            $parser = Services::parser();
 
-        $html = $view['html'];
-        $text = $view['text'];
+            $html = $view->template_html;
+            $text = $view->template_text;
 
-        $html_email = $parser->setData($view['data'])->renderString($html);
-        $text_email = $parser->setData($view['data'])->renderString($text);
+            $html_email = $parser->setData($data)->renderString($html);
+            $text_email = $parser->setData($data)->renderString($text);
+    
+            $set['html'] = $html_email;
+            $set['text'] = $text_email;
 
-        $data['html'] = $html_email;
-        $data['text'] = $text_email;
-        
-        return $this->set_dispatcher($address, $data, $attachment);
+            $address['from'] = $view->mail_from ?? 'autodispatch@demo.com';
+            $address['from_name'] = $view->from_name ?? 'Sender Sender';
+
+            $set['subject'] = $view->subject ?? 'Subject Subject';
+
+            return $this->set_dispatcher($address, $set, $attachment);
+        }
+
+        log_message('critical', 'Email Template not found for ' . $template);
+        return false; // template not found
     }
 
     /**

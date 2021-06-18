@@ -17,7 +17,7 @@ class RecoverLib
      */
     public function start_reset(string $email):array
     {
-        helper('encryption'); // custom encryption helper function
+        helper(['encryption', 'sender']); // custom encryption helper function
         $userlib = service('userlib');
 
         $encrypted_token = encrypt_data();  // goes to the user email address
@@ -52,12 +52,18 @@ class RecoverLib
                 $result['error'] = 'Unable to start up recover process';
             } else {
                 // send email
-                $email = [
-                    'user_email' => $person->user_email, 
+                $link = base_url('/reset/password/' . $encrypted_token);
+
+                $data = [
                     'name' => $person->last_name, 
-                    'token' => $encrypted_token
+                    'link' => $link
                 ];
-                $this->send_reset_mail($email);
+
+                $address = [
+                    'to' => $person->user_email,
+                ];
+
+                send_mail('reset_password', $address, $data);
                 $result['success'] = true;
             }
         }
@@ -120,43 +126,4 @@ class RecoverLib
         return $result;
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Send reset link to user email
-     *
-     * @param array $data
-     * @return void
-     */
-    protected function send_reset_mail(array $data)
-    {
-        $template = service('mailTemplateLib')->find_template('reset_password');
-
-        if ($template) {
-            $view = [
-                'html' => $template->template_html,
-                'text' => $template->template_text,
-            ];
-    
-            $link = (isset($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . '/reset/password/' . $data['token'];
-
-            $view['data'] = [
-                'link' => $link,
-                'name' => $data['name'],
-            ];
-    
-            $address = [
-                'from' => $template->mail_from ?? 'autodispatch@demo.com',
-                'from_name' => $template->from_name ?? 'Auto Dispatch',
-                'to' => $data['user_email'],
-                'to_name' => $data['name'],
-            ];
-    
-            $mail = [
-                'subject' => $template->subject ?? 'Recover your Account',
-            ];
-            return Services::mailerLib()->send_mail($view, $address, $mail);
-        }
-        return false;
-    }
 }
