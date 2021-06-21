@@ -34,6 +34,13 @@ $routes->setAutoRoute(true);
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
 
+$routes->add('forbidden', function()
+    {
+		echo view('errors/html/error_403.php');
+    }, 
+    ['as' => 'forbidden']
+);
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing
