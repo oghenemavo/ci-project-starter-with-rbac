@@ -4,6 +4,7 @@ namespace Ecosystem\Authentication\Libraries;
 
 use Config\{Database, Services};
 use CodeIgniter\I18n\Time;
+use Ecosystem\Authentication\Entities\User as EntitiesUser;
 use Ecosystem\Authentication\Models\{User, UserProfile, UserRole, AccountVerification};
 
 class SignupLib 
@@ -34,9 +35,12 @@ class SignupLib
         // User Table
         $user = new User();
 
+        $user_entity = new EntitiesUser();
+        $user_entity->fill($user_data);
+
         // Insert into user table
         try {
-            $user->save($user_data);
+            $user->save($user_entity);
             $user_data['user_id'] = $user->insertID(); // last user insert id
         } catch (\ReflectionException $e) {
         }

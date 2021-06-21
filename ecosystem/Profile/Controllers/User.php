@@ -3,6 +3,7 @@
 namespace Ecosystem\Profile\Controllers;
 
 use Ecosystem\Authentication\Controllers\AuthBaseController;
+use Ecosystem\Authentication\Models\User as ModelsUser;
 use Ecosystem\Profile\Libraries\ProfileLib;
 
 class User extends AuthBaseController

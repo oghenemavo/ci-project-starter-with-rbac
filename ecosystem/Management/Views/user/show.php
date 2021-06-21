@@ -1,8 +1,6 @@
-<?php use CodeIgniter\I18n\Time; ?>
 <?= $this->extend('Ecosystem\Authentication\Views\layouts\app') ?>
 
 <?= $this->section('content') ?>
-
 
 <dl>
     <dt>First Name</dt>
@@ -21,7 +19,7 @@
     <dt>20 Oct, 2016</dt>
 
     <dt>DOR</dt>
-    <dt><?= Time::parse($user->created_at)->toLocalizedString('MMM d, yyyy') ?></dt>
+    <dt><?= $user->created_at->toLocalizedString('MMM d, yyyy') ?></dt>
 
     <dt>Active</dt>
     <dd><?php echo $user->is_active ? '&#10004;' : '&#10008;'; ?></dd>
@@ -42,8 +40,8 @@
             <li>
                 <?php
                     //open form
-                    $attributes = ['id' => 'update-profile'];
-                    echo form_open(base_url('admin/delete/user/profile/'. $user->id), $attributes);
+                    $attributes = ['id' => 'delete_profile'];
+                    echo form_open(base_url(route_to('delete_user', $user->id)), $attributes);
                 ?>
                 <button type="submit">Delete</button>
 

@@ -21,7 +21,7 @@ class User extends AuthBaseController
 	 */
 	public function index()
 	{
-		$this->rbac->has_permission_or_exception('user', 'can_read');
+		// $this->rbac->has_permission_or_exception('user', 'can_read');
 
 		$data['page_title'] = 'All Users List';
         $data['users'] = $this->manageLib->get_users();
@@ -258,9 +258,11 @@ class User extends AuthBaseController
 						$this->session->setFlashData('error', 'Unable to update user');
 					}
 				}
-				return redirect()->back();
 			}
+		} else {
+			$this->session->setFlashData('error', 'Unable to update user');;
 		}
+		return redirect()->back();
 	}
 
 	/**
@@ -270,6 +272,19 @@ class User extends AuthBaseController
 	 */
 	public function delete($id = null)
 	{
-		//
+		if ($id) {
+			$result = $this->manageLib->delete_user($id); // add role
+
+			if ($this->request->isAJAX()) { // if request is ajax
+				return $this->response->setJSON($result); // $result['error'] or $result['success']
+			} else {
+				if (isset($result['success'])) {
+					$this->session->setFlashData('success', 'User Deleted successfully');
+				} else {
+					$this->session->setFlashData('error', 'Unable to Delete user');
+				}
+			}
+		}
+		return redirect()->back();
 	}
 }

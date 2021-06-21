@@ -116,12 +116,19 @@ class LoginLib
         return true;
     }
 
+    /**
+     * Verify Login Details
+     *
+     * @param string $email
+     * @param string $password
+     * @return void
+     */
     protected function verify_login(string $email, string $password)
     {
         $userlib = Services::userlib();
         $record = $userlib->get_by_email($email);
         if ($record) {
-            if (password_verify($password, $record->user_password)) {
+            if (password_verify($password, $record->getUserPassword())) {
                 return $record;
             }
         }

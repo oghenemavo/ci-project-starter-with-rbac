@@ -11,7 +11,7 @@ class User extends Model
 	protected $primaryKey           = 'id';
 	protected $useAutoIncrement     = true;
 	protected $insertID             = 0;
-	protected $returnType           = 'object';
+	protected $returnType           = 'Ecosystem\Authentication\Entities\User';
 	protected $useSoftDeletes       = false;
 	protected $protectFields        = true;
 	protected $allowedFields        = [
@@ -41,28 +41,14 @@ class User extends Model
 
 	// Callbacks
 	protected $allowCallbacks       = true;
-	protected $beforeInsert         = ['hashPassword'];
+	protected $beforeInsert         = [];
 	protected $afterInsert          = [];
-	protected $beforeUpdate         = ['hashPassword'];
+	protected $beforeUpdate         = [];
 	protected $afterUpdate          = [];
 	protected $beforeFind           = [];
 	protected $afterFind            = [];
 	protected $beforeDelete         = [];
 	protected $afterDelete          = [];
-	
-	/**
-	 * Hash a password
-	 *
-	 * @param array $data
-	 * @return void
-	 */
-	protected function hashPassword(array $data) 
-	{
-        if (isset($data['data']['user_password'])) { // check if the password key is set
-            $data['data']['user_password'] = password_hash($data['data']['user_password'], PASSWORD_DEFAULT); // hash password
-        }
-        return $data;
-    }
 
 	/**
 	 * Fetch a user record

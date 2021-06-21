@@ -54,6 +54,6 @@ class RolePermission extends Model
         $this->select('t2.permission, t2.permission_slug');
         $this->join('permissions t2', 'role_permissions.permission_id = t2.id');
         $this->where('role_permissions.role_id', $role_id);
-        return $this->get()->getResultObject();
+        return $this->findAll();
     }
 }

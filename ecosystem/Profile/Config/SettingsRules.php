@@ -14,12 +14,9 @@ class SettingsRules
      * @return boolean
      */
     public function checkPassword(string $password, string &$error = null): bool {
-        helper('password');
-        $user_id = session()->identity['id']; // user session id
-
-        $user = service('userlib')->get_user_by_id($user_id);
+        $user = service('userlib')->get_user();
         
-        if(!password_verify($password, $user->user_password)) {
+        if(!password_verify($password, $user->getUserPassword())) {
             $error = 'The is not the current password';
             return false;
         }

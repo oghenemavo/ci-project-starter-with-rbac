@@ -49,6 +49,7 @@ $routes->group(
         $routes->post('update/user/(:num)', 'User::update/$1', ['as' => 'update_user']);
         $routes->get('new/user', 'User::new', ['as' => 'new_user']);
         $routes->post('create/user', 'User::create', ['as' => 'create_user']);
+        $routes->post('delete/user/(:num)', 'User::delete/$1', ['as' => 'delete_user']);
 
 		$routes->group('mail', function($routes) {
             // menus for mail settings

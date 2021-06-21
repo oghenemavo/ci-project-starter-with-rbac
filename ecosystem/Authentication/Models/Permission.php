@@ -58,6 +58,6 @@ class Permission extends Model
 		$this->select('permissions.*');
 		$this->join('permission_groups t2', 'permissions.perm_group_id = t2.id');
 		$this->where('t2.id', $perm_group_id);
-		return $this->get()->getResultObject();
+		return $this->findAll();
 	}
 }

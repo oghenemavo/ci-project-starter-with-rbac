@@ -3,6 +3,7 @@
 namespace Ecosystem\Profile\Libraries;
 
 use Config\Database;
+use Ecosystem\Authentication\Entities\User as EntitiesUser;
 use Ecosystem\Authentication\Models\User;
 
 class SettingsLib {
@@ -59,10 +60,13 @@ class SettingsLib {
 
         // User Table
         $user = new User();
+        
+        $user_entity = new EntitiesUser();
+        $user_entity->fill($user_data);
 
         // Update into user table
         try {
-            $user->save($user_data);
+            $user->save($user_entity);
         } catch (\ReflectionException $e) {
         }
 

@@ -114,7 +114,7 @@ class PermissionsLib
     public function get_role_permissions(int $role_id = 0):array {
         $role_perm = new RolePermission();
         if ($role_id) {
-            return $role_perm->where('role_id', $role_id)->get()->getResultObject();
+            return $role_perm->where('role_id', $role_id)->findAll();
         }
         return $role_perm->findAll();
     }

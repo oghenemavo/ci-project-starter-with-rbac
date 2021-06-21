@@ -4,6 +4,7 @@ namespace Ecosystem\Authentication\Libraries;
 
 use Config\{Database, Services};
 use CodeIgniter\I18n\Time;
+use Ecosystem\Authentication\Entities\User as EntitiesUser;
 use Ecosystem\Authentication\Models\{User, AccountVerification};
 
 class RecoverLib
@@ -99,16 +100,21 @@ class RecoverLib
             $db = Database::connect(); // create a database connection
             $db->transStart(); // start transaction automatically
 
+            unset($data['token']);
+            $data['id'] = $person->id;
+
             $user = new User();
 
-            $user->set('user_password', $data['user_password']);
+            $user_entity = new EntitiesUser();
+            $user_entity->fill($data);
+
             $user->set('password_reset_token', null);
             $user->set('password_reset_expires_at', null);
             $user->where('id', $person->id);
 
             // Update into Users table
             try {
-                $user->update();
+                $user->save($user_entity);
             } catch (\ReflectionException $e) {
             }
 
