@@ -123,6 +123,7 @@ class AccountVerificationLib
 
                 $address = [
                     'to' => $user_account->user_email,
+                    'user_id' => $user_account->id,
                 ];
 
                 send_mail('authentication', $address, $data);

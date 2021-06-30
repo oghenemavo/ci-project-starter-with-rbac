@@ -94,6 +94,12 @@ $routes->group(
 
 $routes->add('logout', '\Ecosystem\Authentication\Controllers\Login::logout');
 
+$routes->cli('rollout/alerts', function()
+    {
+        echo command('rollout:alert');
+    }
+);
+
 $routes->add('dashboard', function()
     {
         // $rbac = service('rbac');

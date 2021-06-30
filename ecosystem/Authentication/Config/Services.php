@@ -4,13 +4,26 @@ namespace Ecosystem\Authentication\Config;
 
 use CodeIgniter\Config\BaseService;
 use Ecosystem\Authentication\Libraries\{
-    UserLib, RoleLib, AccountVerificationLib, MailerLib, CIMailerLib,
+    UserLib, RoleLib, AccountVerificationLib, AlertLib, MailerLib, CIMailerLib,
     MailTemplateLib,
     Rbac
 };
 
 class Services extends BaseService
 {
+    /**
+     * AlertLib Service
+     *
+     * @param boolean $getShared
+     * @return void
+     */
+	public static function alertlib($getShared = true) {
+        if ($getShared) {
+            return static::getSharedInstance('alertlib');
+        }
+        return new AlertLib();
+    }
+
     /**
      * MailTemplateLib Service
      *

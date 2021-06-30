@@ -62,6 +62,7 @@ class RecoverLib
 
                 $address = [
                     'to' => $person->user_email,
+                    'user_id' => $person->id,
                 ];
 
                 send_mail('reset_password', $address, $data);

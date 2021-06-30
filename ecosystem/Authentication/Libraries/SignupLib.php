@@ -83,6 +83,7 @@ class SignupLib
             // send email
             $address = [
                 'to' => $user_data['user_email'], 
+                'user_id' => $user_data['user_id'],
             ];
             
             $data = [

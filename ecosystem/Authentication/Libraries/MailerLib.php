@@ -44,11 +44,27 @@ class MailerLib {
 
             $set['subject'] = $view->subject ?? 'Subject Subject';
 
-            return $this->set_dispatcher($address, $set, $attachment);
+            $dispatched = $this->set_dispatcher($address, $set, $attachment);
+
+            if (!$dispatched) {
+                $data = [
+                    'user_id' => $address['user_id'],
+                    'sender' => json_encode(['email' => $view->mail_from, 'name' => $view->from_name]),
+                    'notification_subject' => $view->subject, 
+                    'notification_body' => $html_email,
+                ];
+                service('alertlib')->store_notification($data);
+            }
+            return $dispatched;
         }
 
         log_message('critical', 'Email Template not found for ' . $template);
         return false; // template not found
+    }
+
+    public function send_stored_mail($address, $set, $attachment = [])
+    {
+        return $this->set_dispatcher($address, $set, $attachment);
     }
 
     /**
